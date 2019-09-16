@@ -28,4 +28,11 @@ struct Blob {
         self.radius = 10
     }
 
+    init(inkAmount: Int, postion: CGPoint, radius: Int) {
+        self.inkAmount = inkAmount
+        self.position = postion
+        self.color = UIColor.black
+        self.radius = radius
+    }
+
 }
