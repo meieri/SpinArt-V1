@@ -12,78 +12,12 @@ import Anchorage
 class ViewController: UIViewController {
     let paintBottles = UIView()
     let dropcloth = UIView()
-    let paper = UIView()
-    var paperImageView = UIImageView()
-
-    var lastPoint = CGPoint.zero
-    var color = UIColor.black
-    var brushWidth: CGFloat = 20.0
-    var swiped = false
-
-    // Move a lot of this stuff into the pay per view
     // Touch handling, drawing, etc. ViewController can do standing up of views, heirarchy, etc.
-    //
+    let paper = PaperView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         configureViews()
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
-        swiped = false
-        lastPoint = touch.location(in: paper)
-        print(lastPoint)
-        // paper = view
-        // paperImageView = tempImageView and mainImageView
-    }
-
-    func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
-        UIGraphicsBeginImageContext(paper.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        paperImageView.image?.draw(in: paper.bounds)
-        context.move(to: fromPoint)
-        context.addLine(to: toPoint)
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(brushWidth)
-        context.setStrokeColor(color.cgColor)
-        context.strokePath()
-        paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        paperImageView.alpha = 1.0
-        UIGraphicsEndImageContext()
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
-        swiped = false
-        let currentPoint = touch.location(in: paper)
-        drawLine(from: lastPoint, to: currentPoint)
-        lastPoint = currentPoint
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !swiped {
-            // draw a single point
-            // Maybe this initial draw can happen here, and Blob takes care of the rest?
-            _ = Blob(postion: lastPoint)
-            drawLine(from: lastPoint, to: lastPoint)
-        }
-        UIGraphicsBeginImageContext(paperImageView.frame.size)
-        paperImageView.image?.draw(in: paper.bounds, blendMode: .normal, alpha: 1.0)
-        paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-    }
-
-    func resetBoard() {
-        paperImageView.image = nil
     }
 }
 
@@ -93,7 +27,6 @@ extension ViewController {
         view.addSubview(paintBottles)
         view.addSubview(dropcloth)
         view.addSubview(paper)
-        view.addSubview(paperImageView)
         // Style
         dropcloth.horizontalAnchors == view.horizontalAnchors
         dropcloth.topAnchor == view.topAnchor
@@ -117,7 +50,6 @@ extension ViewController {
         paper.layer.shouldRasterize = true
         paper.layer.rasterizationScale = UIScreen.main.scale
 
-        paperImageView.edgeAnchors == paper.edgeAnchors
         // Finesse
     }
 }
