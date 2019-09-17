@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     let dropcloth = UIView()
     // Touch handling, drawing, etc. ViewController can do standing up of views, heirarchy, etc.
     let paper = PaperView()
+    let resetButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +28,19 @@ extension ViewController {
         view.addSubview(paintBottles)
         view.addSubview(dropcloth)
         view.addSubview(paper)
+        view.addSubview(resetButton)
         // Style
         dropcloth.horizontalAnchors == view.horizontalAnchors
         dropcloth.topAnchor == view.topAnchor
         dropcloth.bottomAnchor == view.bottomAnchor - 200
         dropcloth.backgroundColor = UIColor.white
+
+        resetButton.centerXAnchor == self.view.centerXAnchor
+        resetButton.topAnchor == self.view.topAnchor + 100
+        resetButton.widthAnchor == paper.widthAnchor / 2
+        resetButton.backgroundColor = .red
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.addTarget(paper, action: #selector(paper.resetBoard), for: .touchUpInside)
 
         paper.centerXAnchor == self.view.centerXAnchor
         paper.centerYAnchor == self.view.centerYAnchor - 50

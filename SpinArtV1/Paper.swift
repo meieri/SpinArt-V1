@@ -45,6 +45,7 @@ class PaperView: UIView {
         let currentPoint = touch.location(in: self)
         paperModel.addBlob(at: currentPoint)
         drawLine(from: lastPoint, to: currentPoint)
+        drawBlobs()
         lastPoint = currentPoint
     }
 
@@ -53,6 +54,7 @@ class PaperView: UIView {
             // draw a single point
             paperModel.addBlob(at: lastPoint)
             drawLine(from: lastPoint, to: lastPoint)
+            drawBlobs()
         }
 
         UIGraphicsBeginImageContext(paperImageView.frame.size)
@@ -77,17 +79,23 @@ class PaperView: UIView {
         paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         paperImageView.alpha = 1.0
         UIGraphicsEndImageContext()
-        drawBlobs()
     }
 
     func drawBlobs() {
         // is this clearer than no 'not' and putting the whole func in if statement?
         if !paperModel.blobsLeft() { return }
-        // do so much stuff
+        paperModel.stepBlobs()
+
+        for blob in paperModel.blobs {
+            self.brushWidth = CGFloat(blob.radius)
+            self.color = blob.color
+            drawLine(from: blob.position, to: blob.position)
+        }
     }
 
-    func resetBoard() {
+    @objc func resetBoard() {
         paperImageView.image = nil
+        paperModel.clearBlobs()
     }
 }
 
@@ -118,7 +126,6 @@ extension PaperView {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
                     newBlobs.append(newBlob)
                 } else {
-                    // removal
                     continue
                 }
             }
@@ -127,6 +134,10 @@ extension PaperView {
 
         func blobsLeft() -> Bool {
             return blobs.count > 0
+        }
+
+        func clearBlobs() {
+            blobs = []
         }
     }
 }
