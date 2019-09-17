@@ -12,13 +12,13 @@ import Anchorage
 
 class PaperView: UIView {
     var paperImageView = UIImageView()
-    
+
     var lastPoint = CGPoint.zero
     var color = UIColor.black
     var brushWidth: CGFloat = 20.0
     var swiped = false
 
-    var blobModel = BlobViewModel()
+    let paperModel = PaperView.Model()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,7 +35,6 @@ class PaperView: UIView {
         }
         swiped = false
         lastPoint = touch.location(in: self)
-        print(lastPoint)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -44,16 +43,15 @@ class PaperView: UIView {
         }
         swiped = false
         let currentPoint = touch.location(in: self)
+        paperModel.addBlob(at: currentPoint)
         drawLine(from: lastPoint, to: currentPoint)
         lastPoint = currentPoint
     }
 
-
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
-            let bob = Blob(postion: lastPoint)
-            blobModel.addBlob(blob: bob)
+            paperModel.addBlob(at: lastPoint)
             drawLine(from: lastPoint, to: lastPoint)
         }
 
@@ -79,6 +77,13 @@ class PaperView: UIView {
         paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         paperImageView.alpha = 1.0
         UIGraphicsEndImageContext()
+        drawBlobs()
+    }
+
+    func drawBlobs() {
+        // is this clearer than no 'not' and putting the whole func in if statement?
+        if !paperModel.blobsLeft() { return }
+        // do so much stuff
     }
 
     func resetBoard() {
@@ -90,5 +95,38 @@ extension PaperView {
     func configureViews() {
         self.addSubview(paperImageView)
         paperImageView.edgeAnchors == self.edgeAnchors
+    }
+
+    class Model {
+        // With private(set), the setter is only mutable within the class in the file
+        private(set) var blobs = [Blob]()
+
+        func addBlob(at point: CGPoint) {
+            let bob = Blob(postion: point)
+            blobs.append(bob)
+        }
+
+        // eventually turn into flatmat/compact map
+        func stepBlobs() {
+            var newBlobs = [Blob]()
+            for blob in blobs {
+                let newInkAmount = blob.inkAmount - blob.inkAmount / 10
+                let newRadius = blob.radius - blob.radius / 10
+                let newPosition = CGPoint(x: blob.position.x + blob.position.x / 2,
+                                          y: blob.position.y + blob.position.y / 2)
+                if newInkAmount > 0 {
+                    let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
+                    newBlobs.append(newBlob)
+                } else {
+                    // removal
+                    continue
+                }
+            }
+            blobs = newBlobs
+        }
+
+        func blobsLeft() -> Bool {
+            return blobs.count > 0
+        }
     }
 }

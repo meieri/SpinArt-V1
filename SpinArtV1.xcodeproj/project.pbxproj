@@ -18,7 +18,6 @@
 		FF5B2CEB232BE4AB00D9787B /* SpinArtV1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B2CEA232BE4AB00D9787B /* SpinArtV1UITests.swift */; };
 		FFC8BA37232FCCCF0063F4A7 /* Blob.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8BA36232FCCCF0063F4A7 /* Blob.swift */; };
 		FFC8BA3923300B580063F4A7 /* Paper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8BA3823300B580063F4A7 /* Paper.swift */; };
-		FFC8BA3B233017860063F4A7 /* BlobViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC8BA3A233017860063F4A7 /* BlobViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +61,6 @@
 		FF5B2CEC232BE4AB00D9787B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FFC8BA36232FCCCF0063F4A7 /* Blob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blob.swift; sourceTree = "<group>"; };
 		FFC8BA3823300B580063F4A7 /* Paper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper.swift; sourceTree = "<group>"; };
-		FFC8BA3A233017860063F4A7 /* BlobViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +143,6 @@
 				FF5B2CCC232BE4AA00D9787B /* ViewController.swift */,
 				FFC8BA36232FCCCF0063F4A7 /* Blob.swift */,
 				FFC8BA3823300B580063F4A7 /* Paper.swift */,
-				FFC8BA3A233017860063F4A7 /* BlobViewModel.swift */,
 				FF5B2CD1232BE4AB00D9787B /* Assets.xcassets */,
 				FF5B2CD3232BE4AB00D9787B /* LaunchScreen.storyboard */,
 				FF5B2CD6232BE4AB00D9787B /* Info.plist */,
@@ -394,7 +391,6 @@
 				FFC8BA37232FCCCF0063F4A7 /* Blob.swift in Sources */,
 				FF5B2CCD232BE4AA00D9787B /* ViewController.swift in Sources */,
 				FFC8BA3923300B580063F4A7 /* Paper.swift in Sources */,
-				FFC8BA3B233017860063F4A7 /* BlobViewModel.swift in Sources */,
 				FF5B2CCB232BE4AA00D9787B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
