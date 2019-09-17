@@ -34,5 +34,4 @@ struct Blob {
         self.color = UIColor.black
         self.radius = radius
     }
-
 }

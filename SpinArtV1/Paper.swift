@@ -12,10 +12,13 @@ import Anchorage
 
 class PaperView: UIView {
     var paperImageView = UIImageView()
+    
     var lastPoint = CGPoint.zero
     var color = UIColor.black
     var brushWidth: CGFloat = 20.0
     var swiped = false
+
+    var blobModel = BlobViewModel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,8 +36,6 @@ class PaperView: UIView {
         swiped = false
         lastPoint = touch.location(in: self)
         print(lastPoint)
-        // self = view
-        // paperImageView = tempImageView and mainImageView
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -51,10 +52,11 @@ class PaperView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
-            // Maybe this initial draw can happen here, and Blob takes care of the rest?
-            _ = Blob(postion: lastPoint)
+            let bob = Blob(postion: lastPoint)
+            blobModel.addBlob(blob: bob)
             drawLine(from: lastPoint, to: lastPoint)
         }
+
         UIGraphicsBeginImageContext(paperImageView.frame.size)
         paperImageView.image?.draw(in: self.bounds, blendMode: .normal, alpha: 1.0)
         paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
