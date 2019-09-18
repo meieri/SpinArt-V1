@@ -19,7 +19,6 @@ struct Blob {
     var position: PaperPoint
     var color: UIColor
     var radius: Int
-    // Should this own ViewController? NO
 
     init(postion: PaperPoint) {
         self.inkAmount = 100.0

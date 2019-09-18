@@ -19,8 +19,10 @@ class PaperView: UIView {
     var swiped = false
     let paperModel = PaperView.Model()
 
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        createDisplayLink()
         configureViews()
     }
 
@@ -45,7 +47,6 @@ class PaperView: UIView {
 
         paperModel.addBlob(at: currentPoint, bounds: bounds)
         drawLine(from: lastPoint, to: currentPoint)
-        drawBlobs()
 
         lastPoint = currentPoint
     }
@@ -55,13 +56,17 @@ class PaperView: UIView {
             // draw a single point
             paperModel.addBlob(at: lastPoint, bounds: bounds)
             drawLine(from: lastPoint, to: lastPoint)
-            drawBlobs()
         }
 
         UIGraphicsBeginImageContext(paperImageView.frame.size)
         paperImageView.image?.draw(in: self.bounds, blendMode: .normal, alpha: 1.0)
         paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+    }
+
+    func createDisplayLink() {
+        let displayLink = CADisplayLink(target: self, selector: #selector(update))
+        displayLink.add(to: .current, forMode: .default)
     }
 
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -82,10 +87,13 @@ class PaperView: UIView {
         UIGraphicsEndImageContext()
     }
 
-    func drawBlobs() {
-        // is this clearer than no 'not' and putting the whole func in if statement?
-        if !paperModel.blobsLeft() { return }
-        // while paperModel.blobs.count > 0 {
+    @objc func resetBoard() {
+        paperImageView.image = nil
+        paperModel.clearBlobs()
+    }
+
+    @objc func update(displayLink: CADisplayLink) {
+        print(displayLink.timestamp)
         paperModel.stepBlobs()
         for blob in paperModel.blobs {
             self.brushWidth = CGFloat(blob.radius)
@@ -93,12 +101,6 @@ class PaperView: UIView {
             let convertedPoint = CGPoint(x: blob.position.x + frame.height / 2, y: blob.position.y + frame.width / 2)
             drawLine(from: convertedPoint, to: convertedPoint)
         }
-        // }
-    }
-
-    @objc func resetBoard() {
-        paperImageView.image = nil
-        paperModel.clearBlobs()
     }
 }
 
