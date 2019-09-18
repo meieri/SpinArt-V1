@@ -43,7 +43,7 @@ class PaperView: UIView {
         }
         swiped = false
         let currentPoint = touch.location(in: self)
-        paperModel.addBlob(at: currentPoint)
+        paperModel.addBlob(at: currentPoint, in: self.frame)
         drawLine(from: lastPoint, to: currentPoint)
         drawBlobs()
         lastPoint = currentPoint
@@ -52,7 +52,7 @@ class PaperView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
-            paperModel.addBlob(at: lastPoint)
+            paperModel.addBlob(at: lastPoint, in: self.frame)
             drawLine(from: lastPoint, to: lastPoint)
             drawBlobs()
         }
@@ -89,7 +89,7 @@ class PaperView: UIView {
         for blob in paperModel.blobs {
             self.brushWidth = CGFloat(blob.radius)
             self.color = blob.color
-            drawLine(from: blob.position, to: blob.position)
+            drawLine(from: blob.position.getPoint(), to: blob.position.getPoint())
         }
     }
 
@@ -109,8 +109,9 @@ extension PaperView {
         // With private(set), the setter is only mutable within the class in the file
         private(set) var blobs = [Blob]()
 
-        func addBlob(at point: CGPoint) {
-            let bob = Blob(postion: point)
+        func addBlob(at point: CGPoint, in frame: CGRect) {
+            let newPaperPoint = PaperPoint(point: point, frame: frame)
+            let bob = Blob(postion: newPaperPoint)
             blobs.append(bob)
         }
 
@@ -120,8 +121,7 @@ extension PaperView {
             for blob in blobs {
                 let newInkAmount = blob.inkAmount - blob.inkAmount / 10
                 let newRadius = blob.radius - blob.radius / 10
-                let newPosition = CGPoint(x: blob.position.x + blob.position.x / 2,
-                                          y: blob.position.y + blob.position.y / 2)
+                let newPosition = blob.position.stepPoint()
                 if newInkAmount > 0 {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
                     newBlobs.append(newBlob)
