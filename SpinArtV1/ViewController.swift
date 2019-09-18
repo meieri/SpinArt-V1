@@ -14,7 +14,11 @@ class ViewController: UIViewController {
     let dropcloth = UIView()
     // Touch handling, drawing, etc. ViewController can do standing up of views, heirarchy, etc.
     let paper = PaperView()
+
     let resetButton = UIButton()
+    let blueButton = UIButton()
+    let redButton = UIButton()
+    let greenButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +33,9 @@ extension ViewController {
         view.addSubview(dropcloth)
         view.addSubview(paper)
         view.addSubview(resetButton)
+        view.addSubview(redButton)
+        view.addSubview(greenButton)
+        view.addSubview(blueButton)
         // Style
         dropcloth.horizontalAnchors == view.horizontalAnchors
         dropcloth.topAnchor == view.topAnchor
@@ -41,6 +48,31 @@ extension ViewController {
         resetButton.backgroundColor = .red
         resetButton.setTitle("Reset", for: .normal)
         resetButton.addTarget(paper, action: #selector(paper.resetBoard), for: .touchUpInside)
+
+        redButton.addTarget(paper, action: #selector(paper.changeColor), for: .touchUpInside)
+        redButton.tag = 0
+        blueButton.addTarget(paper, action: #selector(paper.changeColor), for: .touchUpInside)
+        blueButton.tag = 1
+        greenButton.addTarget(paper, action: #selector(paper.changeColor), for: .touchUpInside)
+        greenButton.tag = 2
+
+        redButton.leadingAnchor == view.leadingAnchor + 10
+        redButton.topAnchor == view.topAnchor + 50
+        redButton.heightAnchor == 30
+        redButton.widthAnchor == 75
+        redButton.backgroundColor = .red
+
+        blueButton.leadingAnchor == view.leadingAnchor + 10
+        blueButton.topAnchor == redButton.bottomAnchor + 10
+        blueButton.heightAnchor == 30
+        blueButton.widthAnchor == 75
+        blueButton.backgroundColor = .blue
+
+        greenButton.heightAnchor == 30
+        greenButton.widthAnchor == 75
+        greenButton.leadingAnchor == view.leadingAnchor + 10
+        greenButton.topAnchor == blueButton.bottomAnchor + 10
+        greenButton.backgroundColor = .green
 
         paper.centerXAnchor == self.view.centerXAnchor
         paper.centerYAnchor == self.view.centerYAnchor - 50

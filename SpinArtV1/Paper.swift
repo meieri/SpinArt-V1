@@ -93,6 +93,11 @@ class PaperView: UIView {
         paperModel.clearBlobs()
     }
 
+    @objc func changeColor() {
+        paperImageView.image = nil
+        paperModel.clearBlobs()
+    }
+
     @objc func update(displayLink: CADisplayLink) {
         paperModel.stepBlobs()
         for blob in paperModel.blobs {
@@ -127,17 +132,17 @@ extension PaperView {
                 // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10 + 1)
                 // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10)
                 let newInkAmount = blob.inkAmount - 1
-                print("There's \(newInkAmount) ink left")
+                // print("There's \(newInkAmount) ink left")
                 var newRadius = blob.radius - 0.3
-                if blob.radius < 1 {
-                    newRadius = blob.radius
+                if blob.radius < 5 {
+                    newRadius = 5
                 }
                 let newPosition = PaperPoint(x: blob.position.x + blob.position.x / 100, y: blob.position.y + blob.position.y / 100)
                 if newInkAmount > 0 {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
                     newBlobs.append(newBlob)
                 } else {
-                    print("blob got yopped")
+                    // print("blob got yopped")
                     continue
                 }
             }
