@@ -15,20 +15,20 @@ import Foundation
 import UIKit
 
 struct Blob {
-    var inkAmount: Int
+    var inkAmount: Double
     var position: PaperPoint
     var color: UIColor
     var radius: Int
     // Should this own ViewController? NO
 
     init(postion: PaperPoint) {
-        self.inkAmount = 100
+        self.inkAmount = 100.0
         self.position = postion
         self.color = UIColor.black
-        self.radius = 10
+        self.radius = 20
     }
 
-    init(inkAmount: Int, postion: PaperPoint, radius: Int) {
+    init(inkAmount: Double, postion: PaperPoint, radius: Int) {
         self.inkAmount = inkAmount
         self.position = postion
         self.color = UIColor.black

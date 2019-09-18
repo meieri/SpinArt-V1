@@ -11,13 +11,12 @@ import UIKit
 import Anchorage
 
 class PaperView: UIView {
-    var paperImageView = UIImageView()
 
+    var paperImageView = UIImageView()
     var lastPoint = CGPoint.zero
     var color = UIColor.black
     var brushWidth: CGFloat = 20.0
     var swiped = false
-
     let paperModel = PaperView.Model()
 
     override init(frame: CGRect) {
@@ -43,16 +42,18 @@ class PaperView: UIView {
         }
         swiped = false
         let currentPoint = touch.location(in: self)
-        paperModel.addBlob(at: currentPoint, in: self.frame)
+
+        paperModel.addBlob(at: currentPoint, bounds: bounds)
         drawLine(from: lastPoint, to: currentPoint)
         drawBlobs()
+
         lastPoint = currentPoint
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
-            paperModel.addBlob(at: lastPoint, in: self.frame)
+            paperModel.addBlob(at: lastPoint, bounds: bounds)
             drawLine(from: lastPoint, to: lastPoint)
             drawBlobs()
         }
@@ -84,13 +85,15 @@ class PaperView: UIView {
     func drawBlobs() {
         // is this clearer than no 'not' and putting the whole func in if statement?
         if !paperModel.blobsLeft() { return }
+        // while paperModel.blobs.count > 0 {
         paperModel.stepBlobs()
-
         for blob in paperModel.blobs {
             self.brushWidth = CGFloat(blob.radius)
             self.color = blob.color
-            drawLine(from: blob.position.getPoint(), to: blob.position.getPoint())
+            let convertedPoint = CGPoint(x: blob.position.x + frame.height / 2, y: blob.position.y + frame.width / 2)
+            drawLine(from: convertedPoint, to: convertedPoint)
         }
+        // }
     }
 
     @objc func resetBoard() {
@@ -109,9 +112,9 @@ extension PaperView {
         // With private(set), the setter is only mutable within the class in the file
         private(set) var blobs = [Blob]()
 
-        func addBlob(at point: CGPoint, in frame: CGRect) {
-            let newPaperPoint = PaperPoint(point: point, frame: frame)
-            let bob = Blob(postion: newPaperPoint)
+        func addBlob(at point: CGPoint, bounds: CGRect) {
+            let convertedPoint = PaperPoint(x: point.x - bounds.height / 2, y: point.y - bounds.width / 2)
+            let bob = Blob(postion: convertedPoint)
             blobs.append(bob)
         }
 
@@ -119,13 +122,15 @@ extension PaperView {
         func stepBlobs() {
             var newBlobs = [Blob]()
             for blob in blobs {
-                let newInkAmount = blob.inkAmount - blob.inkAmount / 10
-                let newRadius = blob.radius - blob.radius / 10
-                let newPosition = blob.position.stepPoint()
+                let newInkAmount = blob.inkAmount - (blob.inkAmount / 10 + 1)
+                // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10)
+                let newRadius = blob.radius - blob.radius / 5
+                let newPosition = PaperPoint(x: blob.position.x + blob.position.x / 100, y: blob.position.y + blob.position.y / 100)
                 if newInkAmount > 0 {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
                     newBlobs.append(newBlob)
                 } else {
+                    print("blob got yopped")
                     continue
                 }
             }
