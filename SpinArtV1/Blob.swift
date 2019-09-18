@@ -18,7 +18,7 @@ struct Blob {
     var inkAmount: Double
     var position: PaperPoint
     var color: UIColor
-    var radius: Int
+    var radius: Double
 
     init(postion: PaperPoint) {
         self.inkAmount = 100.0
@@ -27,7 +27,7 @@ struct Blob {
         self.radius = 20
     }
 
-    init(inkAmount: Double, postion: PaperPoint, radius: Int) {
+    init(inkAmount: Double, postion: PaperPoint, radius: Double) {
         self.inkAmount = inkAmount
         self.position = postion
         self.color = UIColor.black

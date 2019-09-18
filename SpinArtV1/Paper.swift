@@ -79,6 +79,7 @@ class PaperView: UIView {
         context.addLine(to: toPoint)
         context.setLineCap(.round)
         context.setBlendMode(.normal)
+        // print("stroke size: \(brushWidth)")
         context.setLineWidth(brushWidth)
         context.setStrokeColor(color.cgColor)
         context.strokePath()
@@ -93,7 +94,6 @@ class PaperView: UIView {
     }
 
     @objc func update(displayLink: CADisplayLink) {
-        print(displayLink.timestamp)
         paperModel.stepBlobs()
         for blob in paperModel.blobs {
             self.brushWidth = CGFloat(blob.radius)
@@ -124,9 +124,14 @@ extension PaperView {
         func stepBlobs() {
             var newBlobs = [Blob]()
             for blob in blobs {
-                let newInkAmount = blob.inkAmount - (blob.inkAmount / 10 + 1)
+                // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10 + 1)
                 // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10)
-                let newRadius = blob.radius - blob.radius / 5
+                let newInkAmount = blob.inkAmount - 1
+                print("There's \(newInkAmount) ink left")
+                var newRadius = blob.radius - 0.3
+                if blob.radius < 1 {
+                    newRadius = blob.radius
+                }
                 let newPosition = PaperPoint(x: blob.position.x + blob.position.x / 100, y: blob.position.y + blob.position.y / 100)
                 if newInkAmount > 0 {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
