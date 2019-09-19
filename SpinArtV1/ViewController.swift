@@ -19,10 +19,12 @@ class ViewController: UIViewController {
     let blueButton = UIButton()
     let redButton = UIButton()
     let greenButton = UIButton()
+    let blackButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViews()
+        // paper.rotate()
     }
 }
 
@@ -36,6 +38,7 @@ extension ViewController {
         view.addSubview(redButton)
         view.addSubview(greenButton)
         view.addSubview(blueButton)
+        view.addSubview(blackButton)
         // Style
         dropcloth.horizontalAnchors == view.horizontalAnchors
         dropcloth.topAnchor == view.topAnchor
@@ -55,6 +58,8 @@ extension ViewController {
         blueButton.tag = 1
         greenButton.addTarget(paper, action: #selector(paper.changeColor), for: .touchUpInside)
         greenButton.tag = 2
+        blackButton.addTarget(paper, action: #selector(paper.changeColor), for: .touchUpInside)
+        blackButton.tag = 3
 
         redButton.leadingAnchor == view.leadingAnchor + 10
         redButton.topAnchor == view.topAnchor + 50
@@ -74,6 +79,12 @@ extension ViewController {
         greenButton.topAnchor == blueButton.bottomAnchor + 10
         greenButton.backgroundColor = .green
 
+        blackButton.heightAnchor == 30
+        blackButton.widthAnchor == 75
+        blackButton.leadingAnchor == view.leadingAnchor + 10
+        blackButton.topAnchor == greenButton.bottomAnchor + 10
+        blackButton.backgroundColor = .black
+
         paper.centerXAnchor == self.view.centerXAnchor
         paper.centerYAnchor == self.view.centerYAnchor - 50
         paper.widthAnchor == 250
@@ -92,5 +103,28 @@ extension ViewController {
         paper.layer.rasterizationScale = UIScreen.main.scale
 
         // Finesse
+    }
+}
+
+extension UIView {
+    private static let kRotationAnimationKey = "rotationanimationkey"
+
+    func rotate(_ duration: Double = 1) {
+        if layer.animation(forKey: UIView.kRotationAnimationKey) == nil {
+            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+
+            rotationAnimation.fromValue = 0.0
+            rotationAnimation.toValue = Float.pi * 2.0
+            rotationAnimation.duration = duration
+            rotationAnimation.repeatCount = Float.infinity
+
+            layer.add(rotationAnimation, forKey: UIView.kRotationAnimationKey)
+        }
+    }
+
+    func stopRotating() {
+        if layer.animation(forKey: UIView.kRotationAnimationKey) != nil {
+            layer.removeAnimation(forKey: UIView.kRotationAnimationKey)
+        }
     }
 }

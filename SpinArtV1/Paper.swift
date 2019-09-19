@@ -93,16 +93,26 @@ class PaperView: UIView {
         paperModel.clearBlobs()
     }
 
-    @objc func changeColor() {
-        paperImageView.image = nil
-        paperModel.clearBlobs()
+    @objc func changeColor(sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            self.color = UIColor.red
+        case 1:
+            self.color = UIColor.blue
+        case 2:
+            self.color = UIColor.green
+        case 3:
+            self.color = UIColor.black
+        default:
+            self.color = UIColor.black
+        }
     }
 
     @objc func update(displayLink: CADisplayLink) {
         paperModel.stepBlobs()
         for blob in paperModel.blobs {
             self.brushWidth = CGFloat(blob.radius)
-            self.color = blob.color
+            // self.color = blob.color
             let convertedPoint = CGPoint(x: blob.position.x + frame.height / 2, y: blob.position.y + frame.width / 2)
             drawLine(from: convertedPoint, to: convertedPoint)
         }
@@ -118,6 +128,7 @@ extension PaperView {
     class Model {
         // With private(set), the setter is only mutable within the class in the file
         private(set) var blobs = [Blob]()
+        var first = true
 
         func addBlob(at point: CGPoint, bounds: CGRect) {
             let convertedPoint = PaperPoint(x: point.x - bounds.height / 2, y: point.y - bounds.width / 2)
@@ -125,14 +136,15 @@ extension PaperView {
             blobs.append(bob)
         }
 
-        // eventually turn into flatmat/compact map
         func stepBlobs() {
             var newBlobs = [Blob]()
             for blob in blobs {
-                // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10 + 1)
-                // let newInkAmount = blob.inkAmount - (blob.inkAmount / 10)
+                if first {
+                    // do it here
+
+                    first = false
+                }
                 let newInkAmount = blob.inkAmount - 1
-                // print("There's \(newInkAmount) ink left")
                 var newRadius = blob.radius - 0.3
                 if blob.radius < 5 {
                     newRadius = 5
@@ -142,10 +154,10 @@ extension PaperView {
                     let newBlob = Blob(inkAmount: newInkAmount, postion: newPosition, radius: newRadius)
                     newBlobs.append(newBlob)
                 } else {
-                    // print("blob got yopped")
                     continue
                 }
             }
+            first = true
             blobs = newBlobs
         }
 
