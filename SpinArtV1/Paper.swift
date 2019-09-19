@@ -44,10 +44,8 @@ class PaperView: UIView {
         }
         swiped = false
         let currentPoint = touch.location(in: self)
-
         paperModel.addBlob(at: currentPoint, bounds: bounds)
         drawLine(from: lastPoint, to: currentPoint)
-
         lastPoint = currentPoint
     }
 
@@ -57,7 +55,6 @@ class PaperView: UIView {
             paperModel.addBlob(at: lastPoint, bounds: bounds)
             drawLine(from: lastPoint, to: lastPoint)
         }
-
         UIGraphicsBeginImageContext(paperImageView.frame.size)
         paperImageView.image?.draw(in: self.bounds, blendMode: .normal, alpha: 1.0)
         paperImageView.image = UIGraphicsGetImageFromCurrentImageContext()
@@ -128,6 +125,7 @@ extension PaperView {
     class Model {
         // With private(set), the setter is only mutable within the class in the file
         private(set) var blobs = [Blob]()
+        private(set) var circleBlobs = [Blob]()
         var first = true
 
         func addBlob(at point: CGPoint, bounds: CGRect) {
@@ -140,8 +138,7 @@ extension PaperView {
             var newBlobs = [Blob]()
             for blob in blobs {
                 if first {
-                    // do it here
-
+                    circleBlobs.append(blob)
                     first = false
                 }
                 let newInkAmount = blob.inkAmount - 1
