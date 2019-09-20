@@ -125,7 +125,7 @@ extension PaperView {
     class Model {
         // With private(set), the setter is only mutable within the class in the file
         private(set) var blobs = [Blob]()
-        private(set) var circleBlobs = [Blob]()
+        private(set) var circleBlob = Blob(postion: PaperPoint(x: 0, y: 0))
         var first = true
 
         func addBlob(at point: CGPoint, bounds: CGRect) {
@@ -138,7 +138,7 @@ extension PaperView {
             var newBlobs = [Blob]()
             for blob in blobs {
                 if first {
-                    circleBlobs.append(blob)
+                    circleBlob = blob
                     first = false
                 }
                 let newInkAmount = blob.inkAmount - 1
@@ -156,6 +156,14 @@ extension PaperView {
             }
             first = true
             blobs = newBlobs
+        }
+
+        func stepCircleBlob() {
+            // do some crazy circle math to get the next blob
+            if circleBlob.position == PaperPoint(x: 0, y: 0) {
+                print("right at the center")
+                return
+            }
         }
 
         func blobsLeft() -> Bool {

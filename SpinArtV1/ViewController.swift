@@ -112,7 +112,6 @@ extension UIView {
     func rotate(_ duration: Double = 1) {
         if layer.animation(forKey: UIView.kRotationAnimationKey) == nil {
             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-
             rotationAnimation.fromValue = 0.0
             rotationAnimation.toValue = Float.pi * 2.0
             rotationAnimation.duration = duration
