@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 // Represents a point translated in terms of a UIView
-struct PaperPoint {
+struct PaperPoint: Equatable {
     var x: CGFloat
     var y: CGFloat
 
@@ -18,4 +18,5 @@ struct PaperPoint {
         self.x = x
         self.y = y
     }
+
 }
