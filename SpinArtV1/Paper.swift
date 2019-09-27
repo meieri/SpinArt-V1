@@ -90,19 +90,8 @@ class PaperView: UIView {
         paperModel.clearBlobs()
     }
 
-    @objc func changeColor(sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            self.color = UIColor.red
-        case 1:
-            self.color = UIColor.blue
-        case 2:
-            self.color = UIColor.green
-        case 3:
-            self.color = UIColor.black
-        default:
-            self.color = UIColor.black
-        }
+    func changeColor(color: UIColor) {
+        self.color = color
     }
 
     @objc func update(displayLink: CADisplayLink) {

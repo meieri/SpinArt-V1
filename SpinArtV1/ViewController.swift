@@ -11,7 +11,6 @@ import Anchorage
 
 class ViewController: UIViewController, SettingsViewDelegate {
 
-
     // Touch handling, drawing, etc. ViewController can do standing up of views, heirarchy, etc.
     let spinArtMachine = SpinArtView()
     let controls = SettingsView()
@@ -24,13 +23,21 @@ class ViewController: UIViewController, SettingsViewDelegate {
          // paper.rotate()
     }
 
-    func resetBoard() {
-        spinArtMachine.paper.resetBoard()
+    func settingsView(_ settingsView: SettingsView, didPerformAction action: Action) {
+        switch action {
+        case .color(Color.red):
+            spinArtMachine.paper.changeColor(color: UIColor.red)
+        case .color(Color.blue):
+            spinArtMachine.paper.changeColor(color: UIColor.blue)
+        case .color(Color.green):
+            spinArtMachine.paper.changeColor(color: UIColor.green)
+        case .color(Color.black):
+            spinArtMachine.paper.changeColor(color: UIColor.black)
+        case .reset:
+            spinArtMachine.paper.resetBoard()
+        }
     }
 
-    func changeColor(sender: UIButton) {
-        spinArtMachine.paper.changeColor(sender: sender)
-    }
 }
 
 extension ViewController {
@@ -42,12 +49,12 @@ extension ViewController {
         // Style
 
         // Layout
-        spinArtMachine.widthAnchor == view.widthAnchor
+        spinArtMachine.horizontalAnchors == view.horizontalAnchors
         spinArtMachine.topAnchor == view.topAnchor
         spinArtMachine.bottomAnchor == 3 * view.bottomAnchor / 4
         spinArtMachine.backgroundColor = .white
 
-        controls.widthAnchor == view.widthAnchor
+        controls.horizontalAnchors == view.horizontalAnchors
         controls.bottomAnchor == view.bottomAnchor
         controls.topAnchor == spinArtMachine.bottomAnchor
         controls.backgroundColor = .lightGray

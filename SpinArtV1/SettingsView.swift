@@ -17,7 +17,7 @@ class SettingsView: UIView {
     let greenButton = UIButton()
     let blackButton = UIButton()
 
-    var delegate: SettingsViewDelegate?
+    weak var delegate: SettingsViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,14 +28,51 @@ class SettingsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func resetBoard() {
-        delegate?.resetBoard()
-    }
+        // delegate?.settingsView(self, didPerformAction: .color(.red))
 
-    @objc func changeColor(sender: UIButton) {
-        delegate?.changeColor(sender: sender)
-    }
+        // action enum--
+        // pass a quick self in case you have multiple settings view
+        // func settingsView(_ settingView SettingsView didPerformAction action: Action)
+        // enum Action {
+        //  case color(color)
+        // case clear
+        // etc... }
 
+        // func settingsView(_ settingsView: SettingsView, didChooseColor color: Color)
+        // func settingsView(_ settingsView: SettingsView, didClear: ???)
+        // func settingsViewDidClear(_ settingsView: SettingsView)
+        // func settingsView(_ settingsView: SettingsView, didClear: Void)
+        // self.settingsView(self, didClear: ())
+
+        // enum Color: Int, CaseIterable {
+        // case red = 1
+        // case blue
+        // .rawValue
+        // -> .allCases
+
+        // extension Color {
+        //   var color: UIColor {
+        //     switch self {
+        //       case .red: return UIColor.red
+        //     }
+        // }
+
+    @objc func didPerformAction(sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            delegate?.settingsView(self, didPerformAction: Action.reset)
+        case 2:
+            delegate?.settingsView(self, didPerformAction: Action.color(Color.red))
+        case 3:
+            delegate?.settingsView(self, didPerformAction: Action.color(Color.blue))
+        case 4:
+            delegate?.settingsView(self, didPerformAction: Action.color(Color.green))
+        case 5:
+            delegate?.settingsView(self, didPerformAction: Action.color(Color.black))
+        default:
+            print("Button not added")
+        }
+    }
 }
 
 extension SettingsView {
@@ -46,47 +83,50 @@ extension SettingsView {
         self.addSubview(greenButton)
         self.addSubview(blueButton)
         self.addSubview(blackButton)
-        // Style
 
-        resetButton.centerXAnchor == self.centerXAnchor
-        resetButton.topAnchor == self.topAnchor + 100
-        resetButton.widthAnchor == self.widthAnchor / 6
-        resetButton.backgroundColor = .red
+        // Style
+        resetButton.addTarget(self, action: #selector(didPerformAction), for: .touchUpInside)
+        resetButton.tag = 1
+        redButton.addTarget(self, action: #selector(didPerformAction), for: .touchUpInside)
+        redButton.tag = 2
+        blueButton.addTarget(self, action: #selector(didPerformAction), for: .touchUpInside)
+        blueButton.tag = 3
+        greenButton.addTarget(self, action: #selector(didPerformAction), for: .touchUpInside)
+        greenButton.tag = 4
+        blackButton.addTarget(self, action: #selector(didPerformAction), for: .touchUpInside)
+        blackButton.tag = 5
         resetButton.setTitle("Reset", for: .normal)
 
-        resetButton.addTarget(self, action: #selector(resetBoard), for: .touchUpInside)
-
-        redButton.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
-        redButton.tag = 0
-        blueButton.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
-        blueButton.tag = 1
-        greenButton.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
-        greenButton.tag = 2
-        blackButton.addTarget(self, action: #selector(changeColor), for: .touchUpInside)
-        blackButton.tag = 3
-
-        redButton.leadingAnchor == self.leadingAnchor + 10
+        // Layout
+        redButton.leadingAnchor == self.leadingAnchor + 20 // 50/2
         redButton.topAnchor == self.topAnchor + 50
-        redButton.heightAnchor == 30
-        redButton.widthAnchor == 75
+        redButton.bottomAnchor == self.bottomAnchor - 50
+        redButton.widthAnchor == self.widthAnchor / 8
         redButton.backgroundColor = .red
 
-        blueButton.leadingAnchor == self.leadingAnchor + 10
-        blueButton.topAnchor == redButton.bottomAnchor + 10
-        blueButton.heightAnchor == 30
-        blueButton.widthAnchor == 75
+        blueButton.leadingAnchor == redButton.trailingAnchor + 20
+        blueButton.topAnchor == self.topAnchor + 50
+        blueButton.bottomAnchor == self.bottomAnchor - 50
+        blueButton.widthAnchor == self.widthAnchor / 8
         blueButton.backgroundColor = .blue
 
-        greenButton.heightAnchor == 30
-        greenButton.widthAnchor == 75
-        greenButton.leadingAnchor == self.leadingAnchor + 10
-        greenButton.topAnchor == blueButton.bottomAnchor + 10
+        greenButton.leadingAnchor == blueButton.trailingAnchor + 20
+        greenButton.topAnchor == self.topAnchor + 50
+        greenButton.bottomAnchor == self.bottomAnchor - 50
+        greenButton.widthAnchor == self.widthAnchor / 8
         greenButton.backgroundColor = .green
 
-        blackButton.heightAnchor == 30
-        blackButton.widthAnchor == 75
-        blackButton.leadingAnchor == self.leadingAnchor + 10
-        blackButton.topAnchor == greenButton.bottomAnchor + 10
+        blackButton.leadingAnchor == greenButton.trailingAnchor + 20
+        blackButton.topAnchor == self.topAnchor + 50
+        blackButton.bottomAnchor == self.bottomAnchor - 50
+        blackButton.widthAnchor == self.widthAnchor / 8
         blackButton.backgroundColor = .black
+
+        resetButton.leadingAnchor == blackButton.trailingAnchor + 20
+        resetButton.topAnchor == self.topAnchor + 50
+        resetButton.bottomAnchor == self.bottomAnchor - 50
+        resetButton.widthAnchor == self.widthAnchor / 8
+        resetButton.backgroundColor = .purple
+
     }
 }

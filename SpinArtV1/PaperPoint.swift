@@ -18,5 +18,4 @@ struct PaperPoint: Equatable {
         self.x = x
         self.y = y
     }
-
 }

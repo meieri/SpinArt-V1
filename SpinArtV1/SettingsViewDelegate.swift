@@ -10,9 +10,8 @@ import UIKit
 import Foundation
 
 // This is the delegate protocol
-protocol SettingsViewDelegate {
+protocol SettingsViewDelegate: AnyObject {
     // Classes that adopt this protocol MUST define these methods
-    func resetBoard()
-    func changeColor(sender: UIButton)
+    func settingsView(_ settingsView: SettingsView, didPerformAction action: Action)
 }
 
